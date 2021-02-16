@@ -14,11 +14,11 @@ exports.login=async(req,res)=>{
             const isMatch=await bcrypt.compare(req.body.password,user.password);
             const token= await user.generateAuthToken();
             if(isMatch){
-                res.status(200).send("logged in successfully!");
-                // res.status(200).json({
-                //     message: "logged in successfully!",
-                    
-                // })
+                // res.status(200).send("logged in successfully!");
+                res.status(200).json({
+                    message: "logged in successfully!",
+                    token:token
+                })
             }
             else{
                 res.status(403).json({
@@ -126,9 +126,15 @@ exports.signUp=async(req,res,next)=>{
             })
 
             const token= await userRegister.generateAuthToken();
+            // res.cookie("jwt",token);
+            // console.log(cookie);
 
             const result=await userRegister.save();
-            res.status(200).send("Successfully registered");
+            res.status(200).json({
+                message: "Successfully registered",
+                token:token
+            })   
+                // })send("Successfully registered");
         }
         else{
             res.send("password not matching");
